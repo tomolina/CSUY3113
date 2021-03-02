@@ -256,17 +256,8 @@ void Update() {
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
     
-    program.SetModelMatrix(modelMatrix);
-    
-    float vertices[] = { 0.5f, -0.5f, 0.0f, 0.5f, -0.5f, -0.5f };
-    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
-    glEnableVertexAttribArray(program.positionAttribute);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    glDisableVertexAttribArray(program.positionAttribute);
-
     state.square->Render(&program);
     state.leftPad->Render(&program);
-    
     state.rightPad->Render(&program);
     
     SDL_GL_SwapWindow(displayWindow);
