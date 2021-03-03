@@ -97,54 +97,65 @@ void Initialize() {
     GLuint squareTextureID = LoadTexture("square.png");
     state.square->textureID = squareTextureID;
     state.square->position = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.square->movement = glm::vec3(0);
     state.square->speed = 2.0f;
     
     
     state.bars = new Entity[BAR_COUNT];
     GLuint barsTextureID = LoadTexture("bar.png");
+   
     
     state.bars[0].textureID = barsTextureID;
     state.bars[0].position = glm::vec3(0.0f, 2.0f, 0.0f);
+    state.bars[0].movement = glm::vec3(0);
     
     state.bars[1].textureID = barsTextureID;
     state.bars[1].position = glm::vec3(0.0f, 1.0f, 0.0f);
+    state.bars[1].movement = glm::vec3(0);
     
     state.bars[2].textureID = barsTextureID;
     state.bars[2].position = glm::vec3(0.0f, 0.0f, 0.0f);
+    state.bars[2].movement = glm::vec3(0);
     
     state.bars[3].textureID = barsTextureID;
     state.bars[3].position = glm::vec3(0.0f, 3.0f, 0.0f);
+    state.bars[3].movement = glm::vec3(0);
     
     state.bars[4].textureID = barsTextureID;
     state.bars[4].position = glm::vec3(0.0f, -1.0f, 0.0f);
+    state.bars[4].movement = glm::vec3(0);
     
     state.bars[5].textureID = barsTextureID;
     state.bars[5].position = glm::vec3(0.0f, -2.0f, 0.0f);
+    state.bars[5].movement = glm::vec3(0);
     
     state.bars[6].textureID = barsTextureID;
     state.bars[6].position = glm::vec3(0.0f, -3.0f, 0.0f);
+    state.bars[6].movement = glm::vec3(0);
     
     state.bars[7].textureID = barsTextureID;
     state.bars[7].position = glm::vec3(0.0f, -4.0f, 0.0f);
+    state.bars[7].movement = glm::vec3(0);
     
     state.bars[8].textureID = barsTextureID;
     state.bars[8].position = glm::vec3(0.0f, 4.0f, 0.0f);
+    state.bars[8].movement = glm::vec3(0);
     
     state.bars[9].textureID = barsTextureID;
     state.bars[9].position = glm::vec3(0.0f, 5.0f, 0.0f);
+    state.bars[9].movement = glm::vec3(0);
     
     
-    
+    GLuint paddleTextureID = LoadTexture("Paddle2.png");
     
     state.leftPad = new Entity();
     state.leftPad->position = glm::vec3(-5.0f, 0.0f, 0.0f);
     state.leftPad->movement = glm::vec3(0);
     state.leftPad->speed = 3.0f;
-    state.leftPad->textureID = LoadTexture("Paddle Copy.png");
+    state.leftPad->textureID = paddleTextureID;
     
     state.rightPad = new Entity();
-    GLuint rightPadTextureID = LoadTexture("Paddle2.png");
-    state.rightPad->textureID = rightPadTextureID;
+    state.rightPad->textureID = paddleTextureID;
     state.rightPad->position = glm::vec3(5.0f, 0.0f, 0.0f);
     state.rightPad->movement = glm::vec3(0);
     state.rightPad->speed = 3.0f;
@@ -207,14 +218,6 @@ void DrawText(ShaderProgram *program, GLuint fontTextureID, std::string text,
     glDisableVertexAttribArray(program->texCoordAttribute);
     
     }
-//
-//void WinnerRender(){
-//    glClear(GL_COLOR_BUFFER_BIT);
-//
-//    GLuint fontTextureID = LoadTexture("font2.png");
-//    DrawText(&program, fontTextureID, "Winner!" , 0.5f, -0.25f, glm::vec3(-4.0f, 2.0, 0));
-//    //SDL_GL_SwapWindow(displayWindow);
-//}
 
 
 
@@ -222,7 +225,6 @@ void ProcessInput() {
    state.leftPad->movement = glm::vec3(0);
    state.rightPad->movement = glm::vec3(0);
     
-   //state.square->speed = 3.0f;
    // X and Y positions for our paddles and pong
    float left_X = state.leftPad->position.x;
    float left_Y = state.leftPad->position.y;
@@ -277,16 +279,9 @@ void ProcessInput() {
     //Game Over
     if(state.square->position.x >= 4.9f){
         state.square->movement = glm::vec3(0);
-        GLuint fontTextureID = LoadTexture("font2.png");
-        DrawText(&program, fontTextureID, "Winner!" , 0.5f, -0.25f, glm::vec3(-4.0f, 2.0, 0));
-        //WinnerRender();
-        //DrawText(&program, fontTextureID, "Player 1" , 0.5f, -0.25f, glm::vec3(-4.0f, 3.3, 0));
     }
     else if(state.square->position.x <= -4.9f){
         state.square->movement = glm::vec3(0);
-        GLuint fontTextureID = LoadTexture("font2.png");
-        DrawText(&program, fontTextureID, "Winner!" , 0.5f, -0.25f, glm::vec3(4.0f, 2.0, 0));
-        //WinnerRender();
     }
         
     
@@ -383,7 +378,6 @@ void Render() {
     state.square->Render(&program);
     state.leftPad->Render(&program);
     state.rightPad->Render(&program);
-    
     
     SDL_GL_SwapWindow(displayWindow);
     }
