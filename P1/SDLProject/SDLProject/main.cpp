@@ -14,49 +14,22 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "Entity.h"
-#define ENEMY_COUNT 3
-
-
-struct GameState{
-    Entity *player;
-    Entity *enemies;
-    
-};
-GameState state;
-
 SDL_Window* displayWindow;
 bool gameIsRunning = true;
 
 ShaderProgram program;
-glm::mat4 viewMatrix, modelMatrix, marioMatrix, sunMatrix, blockMatrix, cloudMatrix1, cloudMatrix2, cloudMatrix3, ctgMatrix, projectionMatrix;
+glm::mat4 viewMatrix, marioMatrix, sunMatrix, blockMatrix, cloudMatrix1, cloudMatrix2, cloudMatrix3, ctgMatrix, projectionMatrix;
 
-/*
-// Input Practice below
-
-// Start at 0, 0, 0
-glm::vec3 player_position = glm::vec3(0, 0, 0);
-
-// Don’t go anywhere (yet).
-glm::vec3 player_movement = glm::vec3(0, 0, 0);
-
-float player_speed = 1.0f;
-
-
-//
-//float marioX = 0;
-//float marioX2 = 10;
-//float ctgX = 0;
-//float playerRotate = 0;
+float marioX = 0;
+float marioX2 = 10;
+float ctgX = 0;
+float playerRotate = 0;
 
 GLuint marioTextureID;
 GLuint ctgTextureID;
 GLuint cloudTextureID;
 GLuint sunTextureID;
 GLuint blockTextureID;
-*/
-
-
 
 //TEXTURES!
 GLuint LoadTexture(const char* filePath) {
@@ -75,8 +48,6 @@ GLuint LoadTexture(const char* filePath) {
     stbi_image_free(image);
     return textureID;
 }
-
-
 
 
 void Initialize() {
@@ -108,100 +79,20 @@ void Initialize() {
     // Good setting for transparency
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
-    //Textures!!
-    // We are using george texture, but for simplicity we will just replace the mario texture
-
-    /*
-    marioTextureID = LoadTexture("george_0.png");
-    
-//    marioTextureID = LoadTexture("Mario.png");
+    marioTextureID = LoadTexture("Mario.png");
     ctgTextureID = LoadTexture("ctg.png");
     cloudTextureID = LoadTexture("Cloud.png");
     sunTextureID = LoadTexture("DaSun.png");
     blockTextureID = LoadTexture("blocks.png");
-    */
     
-    state.player = new Entity();
-    state.player->position = glm::vec3(0);
-    state.player->movement = glm::vec3(0);
-    state.player->speed = 1.0f;
-    state.player->textureID = LoadTexture("george_0.png");
-    
-    // For animation movement
-    state.player->animRight = new int[4] {3, 7, 11, 15};
-    state.player->animLeft = new int[4] {1, 5, 9, 13};
-    state.player->animUp = new int[4] {2, 6, 10, 14};
-    state.player->animDown = new int[4] {0, 4, 8, 12};
-
-    state.player->animIndices = state.player->animRight;
-    state.player->animFrames = 4;
-    state.player->animIndex = 0;
-    state.player->animTime = 0;
-    state.player->animRows = 4;
-    state.player->animCols = 4;
-    
-    state.enemies = new Entity[ENEMY_COUNT];
-    
-    GLuint enemyTextureID = LoadTexture("ctg.png");
-    state.enemies[0].textureID = enemyTextureID;
-    state.enemies[0].position = glm::vec3(-2.0f, -2.0f, 0.0f);
-    
-    state.enemies[1].textureID = enemyTextureID;
-    state.enemies[1].position = glm::vec3(0.0f, -2.0f, 0.0f);
-    
-    state.enemies[2].textureID = enemyTextureID;
-    state.enemies[2].position = glm::vec3(2.0f, -2.0f, 0.0f);
 }
 
 void ProcessInput() {
-   state.player->movement = glm::vec3(0);
-    
-   SDL_Event event;
-   while (SDL_PollEvent(&event)) {
-       switch (event.type) {
-
-           case SDL_QUIT:
-           case SDL_WINDOWEVENT_CLOSE:
-               gameIsRunning = false;
-               break;
-           case SDL_KEYDOWN:
-               switch (event.key.keysym.sym) {
-                   case SDLK_LEFT:
-                       // Move the player left
-                       break;
-                   case SDLK_RIGHT:
-                       // Move the player right
-                       
-                       break;
-                   case SDLK_SPACE:
-                       // Some sort of action
-                       break;
-               }
-               break; // SDL_KEYDOWN
-       }
-   }
-
-   const Uint8 *keys = SDL_GetKeyboardState(NULL);
-    
-   if (keys[SDL_SCANCODE_LEFT]) {
-       state.player->movement.x = -1.0f;
-       state.player->animIndices = state.player->animLeft;
-   }
-   else if (keys[SDL_SCANCODE_RIGHT]) {
-       state.player->movement.x = 1.0f;
-       state.player->animIndices = state.player->animRight;
-   }
-    
-    if (keys[SDL_SCANCODE_UP]) {
-        state.player->movement.y = 1.0f;
-        state.player->animIndices = state.player->animUp;
-    }
-    else if (keys[SDL_SCANCODE_DOWN]) {
-        state.player->movement.y = -1.0f;
-        state.player->animIndices = state.player->animDown;
-    }
-    if (glm::length(state.player->movement) > 1.0f) {
-        state.player->movement = glm::normalize(state.player->movement);
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
+            gameIsRunning = false;
+        }
     }
 }
 
@@ -209,29 +100,120 @@ void ProcessInput() {
 float lastTicks = 0.0f;
 
 void Update() {
+    //Deltatime cont.
     float ticks = (float)SDL_GetTicks() / 1000.0f;
     float deltaTime = ticks - lastTicks;
     lastTicks = ticks;
     
-    for(int i = 0; i < ENEMY_COUNT; i++){
-        state.enemies[i].Update(deltaTime);
+    
+    //Orthographic Practice:
+    marioX += 1.5f * deltaTime;
+    marioX2 -= 1.5f * deltaTime;
+    ctgX += 1.5f * deltaTime;
+    playerRotate += 50.0f * deltaTime;
+    
+    
+    //Implementing Mario!
+    marioMatrix = glm::mat4(1.0f);
+    marioMatrix = glm::translate(marioMatrix, glm::vec3(-5.0f, -1.0f, 0.0f));
+    
+    //Translate
+    if(marioX > 10.0f){
+        marioMatrix = glm::translate(marioMatrix, glm::vec3(10.0f, 0.0f, 0.0f));
+        marioMatrix = glm::translate(marioMatrix, glm::vec3(marioX2, 0.0f, 0.0f));
+    }
+    else{
+        marioMatrix = glm::translate(marioMatrix, glm::vec3(marioX, 0.0f, 0.0f));
     }
     
-    state.player->Update(deltaTime);
-
+    
+    //Implementing our Sun!
+    sunMatrix = glm::mat4(1.0f);
+    sunMatrix = glm::translate(sunMatrix, glm::vec3(3.75, 2.5f, 0.0f));
+    
+    //Rotate
+    sunMatrix = glm::rotate(sunMatrix, glm::radians(playerRotate), glm::vec3(0.0f, 0.0f, 1.0f));
+    
+    //Scale
+    sunMatrix = glm::scale(sunMatrix, glm::vec3(1.5f, 1.5f, 1.0f));
+    
+    //Implementing the floor blocks!
+    blockMatrix = glm::mat4(1.0f);
+    blockMatrix = glm::scale(blockMatrix, glm::vec3(10.0f, 2.5f, 1.0f));
+    blockMatrix = glm::translate(blockMatrix, glm::vec3(0.0f, -1.1f, 1.0f));
+    
+    //Implementing the clouds!
+    cloudMatrix1 = glm::mat4(1.0f);
+    cloudMatrix1 = glm::scale(cloudMatrix1, glm::vec3(1.5f, 1.0f, 1.0f));
+    cloudMatrix1 = glm::translate(cloudMatrix1, glm::vec3(-2.0f, 2.0f, 1.0f));
+    
+    cloudMatrix2 = glm::mat4(1.0f);
+    cloudMatrix2 = glm::scale(cloudMatrix2, glm::vec3(1.5f, 1.0f, 1.0f));
+    cloudMatrix2 = glm::translate(cloudMatrix2, glm::vec3(1.4f, 2.0f, 1.0f));
+    
+    cloudMatrix3 = glm::mat4(1.0f);
+    cloudMatrix3 = glm::scale(cloudMatrix3, glm::vec3(1.5f, 1.0f, 1.0f));
+    cloudMatrix3 = glm::translate(cloudMatrix3, glm::vec3(-0.25f, 1.0f, 1.0f));
+    
+    //Implementing thr Professor!
+    ctgMatrix = glm::mat4(1.0f);
+    ctgMatrix = glm::scale(ctgMatrix, glm::vec3(1.0f, 1.5f, 1.0f));
+    ctgMatrix = glm::translate(ctgMatrix, glm::vec3(17.0f, -0.5f, 1.0f));
+    
+    if(marioX > 10.0f){
+        ctgMatrix = glm::translate(ctgMatrix, glm::vec3(-ctgX, 0.0f, 0.0f));
+    }
+    
 }
 
 //Rendering for Textures!
 void Render() {
     glClear(GL_COLOR_BUFFER_BIT);
+    program.SetModelMatrix(marioMatrix);
     
-    for(int i = 0; i < ENEMY_COUNT; i++){
-        state.enemies[i].Render(&program);
-    }
+    float vertices[]  = { -0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, -0.5, 0.5, 0.5, -0.5, 0.5 };
+    float texCoords[] = { 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0 };
     
-    program.SetModelMatrix(modelMatrix);
-    state.player->Render(&program);
+    glVertexAttribPointer(program.positionAttribute, 2, GL_FLOAT, false, 0, vertices);
+    glEnableVertexAttribArray(program.positionAttribute);
+    glVertexAttribPointer(program.texCoordAttribute, 2, GL_FLOAT, false, 0, texCoords);
+    glEnableVertexAttribArray(program.texCoordAttribute);
     
+    glBindTexture(GL_TEXTURE_2D, marioTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(sunMatrix);
+    
+    glBindTexture(GL_TEXTURE_2D, sunTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(blockMatrix);
+    
+    glBindTexture(GL_TEXTURE_2D, blockTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(cloudMatrix1);
+    
+    glBindTexture(GL_TEXTURE_2D, cloudTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(cloudMatrix2);
+    
+    glBindTexture(GL_TEXTURE_2D, cloudTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(cloudMatrix3);
+    
+    glBindTexture(GL_TEXTURE_2D, cloudTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    program.SetModelMatrix(ctgMatrix);
+    
+    glBindTexture(GL_TEXTURE_2D, ctgTextureID);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    
+    glDisableVertexAttribArray(program.positionAttribute);
+    glDisableVertexAttribArray(program.texCoordAttribute);
     
     SDL_GL_SwapWindow(displayWindow);
     }
