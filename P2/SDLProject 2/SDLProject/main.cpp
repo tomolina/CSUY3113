@@ -12,6 +12,9 @@
 #include "ShaderProgram.h"
 #include <vector>
 
+#include <SDL_mixer.h>
+
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -34,7 +37,8 @@ bool gameIsRunning = true;
 ShaderProgram program;
 glm::mat4 viewMatrix, modelMatrix, projectionMatrix;
 
-
+Mix_Music *music;
+Mix_Chunk *bounce;
 
 //TEXTURES!
 GLuint LoadTexture(const char* filePath) {
@@ -64,7 +68,7 @@ GLuint LoadTexture(const char* filePath) {
 
 
 void Initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     displayWindow = SDL_CreateWindow("Pong!", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, SDL_WINDOW_OPENGL);
     SDL_GLContext context = SDL_GL_CreateContext(displayWindow);
     SDL_GL_MakeCurrent(displayWindow, context);
@@ -159,6 +163,13 @@ void Initialize() {
     state.rightPad->position = glm::vec3(5.0f, 0.0f, 0.0f);
     state.rightPad->movement = glm::vec3(0);
     state.rightPad->speed = 3.0f;
+    
+    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+    music = Mix_LoadMUS("dooblydoo.mp3");
+    Mix_PlayMusic(music, -1);
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 4);
+    
+    bounce = Mix_LoadWAV("bounce.wav");
     
 }
 
@@ -271,9 +282,11 @@ void ProcessInput() {
     //Creating borders for pong to bounce off of
     if(state.square->position.y > 3.6f){
         state.square->movement.y *= -1.0f;
+        Mix_PlayChannel(-1, bounce, 0);
     }
     else if(state.square->position.y < -3.6f){
         state.square->movement.y *= -1.0f;
+        Mix_PlayChannel(-1, bounce, 0);
     }
     
     //Game Over

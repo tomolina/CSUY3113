@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		A43057FD25FD9CD900B11E82 /* font2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A43057FC25FD9CD200B11E82 /* font2.png */; };
+		A4705B2F2611874E007C9A3F /* bounce.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = A4705B2D26118719007C9A3F /* bounce.wav */; };
+		A4705B3126118750007C9A3F /* dooblydoo.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = A4705B2E2611873B007C9A3F /* dooblydoo.mp3 */; };
 		A490F97F25EAF6D700E386FC /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A490F97D25EAF6D700E386FC /* Entity.cpp */; };
 		A4949B4D25EC93ED006A4F85 /* Paddle copy.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A4949B4C25EC93DC006A4F85 /* Paddle copy.png */; };
 		A4949B5025ECA188006A4F85 /* Paddle2.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = A4949B4F25ECA17F006A4F85 /* Paddle2.png */; };
@@ -31,7 +33,9 @@
 			dstSubfolderSpec = 6;
 			files = (
 				DBDF1B612323DE9E007CECB1 /* shaders in CopyFiles */,
+				A4705B3126118750007C9A3F /* dooblydoo.mp3 in CopyFiles */,
 				A4AF79C825EECA9E00CF57CC /* bar.png in CopyFiles */,
+				A4705B2F2611874E007C9A3F /* bounce.wav in CopyFiles */,
 				A4BEDD8625ED7A76002B7B1A /* square.png in CopyFiles */,
 				A43057FD25FD9CD900B11E82 /* font2.png in CopyFiles */,
 				A4949B5025ECA188006A4F85 /* Paddle2.png in CopyFiles */,
@@ -43,6 +47,8 @@
 
 /* Begin PBXFileReference section */
 		A43057FC25FD9CD200B11E82 /* font2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = font2.png; sourceTree = "<group>"; };
+		A4705B2D26118719007C9A3F /* bounce.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bounce.wav; sourceTree = "<group>"; };
+		A4705B2E2611873B007C9A3F /* dooblydoo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dooblydoo.mp3; sourceTree = "<group>"; };
 		A490F97D25EAF6D700E386FC /* Entity.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		A490F97E25EAF6D700E386FC /* Entity.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		A4949B4C25EC93DC006A4F85 /* Paddle copy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Paddle copy.png"; sourceTree = "<group>"; };
@@ -86,6 +92,8 @@
 				A43057FC25FD9CD200B11E82 /* font2.png */,
 				A4AF79C725EECA9B00CF57CC /* bar.png */,
 				A4BEDD8525ED7A6F002B7B1A /* square.png */,
+				A4705B2D26118719007C9A3F /* bounce.wav */,
+				A4705B2E2611873B007C9A3F /* dooblydoo.mp3 */,
 				A4949B4C25EC93DC006A4F85 /* Paddle copy.png */,
 				DBDF1B512323DE3F007CECB1 /* SDLProject */,
 				DBDF1B502323DE3F007CECB1 /* Products */,
